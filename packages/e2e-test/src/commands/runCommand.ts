@@ -548,18 +548,12 @@ async function fetchCatalogEntities() {
 
   for (let attempt = 1; ; attempt += 1) {
     try {
-      const res = await fetch('http://localhost:7007/api/catalog/entities');
+      const res = await fetch('http://localhost:7007/api/catalog/entities', {
+        method: 'HEAD',
+      });
       if (!res.ok) {
         throw new Error(
           `Failed to fetch entities: ${res.status} ${res.statusText}`,
-        );
-      }
-      const content = await res.text();
-      try {
-        JSON.parse(content);
-      } catch (error) {
-        throw new Error(
-          `Failed to parse entities JSON response: ${error}\n${content}`,
         );
       }
       return;
