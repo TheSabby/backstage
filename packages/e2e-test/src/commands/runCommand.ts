@@ -519,21 +519,7 @@ async function testBackendStart(appDir: string, ...args: string[]) {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     print('Try to fetch entities from the backend');
-    // Try fetch entities, should be ok
-    const res = await fetch('http://localhost:7007/api/catalog/entities');
-    if (!res.ok) {
-      throw new Error(
-        `Failed to fetch entities: ${res.status} ${res.statusText}`,
-      );
-    }
-    const content = await res.text();
-    try {
-      JSON.parse(content);
-    } catch (error) {
-      throw new Error(
-        `Failed to parse entities JSON response: ${error}\n${content}`,
-      );
-    }
+    await fetchCatalogEntities();
     print('Entities fetched successfully');
     successful = true;
   } catch (error) {
@@ -554,5 +540,34 @@ async function testBackendStart(appDir: string, ...args: string[]) {
       throw new Error(`Backend failed to startup: ${stderr}`);
     }
     print('Backend startup test finished successfully');
+  }
+}
+
+async function fetchCatalogEntities() {
+  const maxAttempts = 10;
+
+  for (let attempt = 1; ; attempt += 1) {
+    try {
+      const res = await fetch('http://localhost:7007/api/catalog/entities');
+      if (!res.ok) {
+        throw new Error(
+          `Failed to fetch entities: ${res.status} ${res.statusText}`,
+        );
+      }
+      const content = await res.text();
+      try {
+        JSON.parse(content);
+      } catch (error) {
+        throw new Error(
+          `Failed to parse entities JSON response: ${error}\n${content}`,
+        );
+      }
+      return;
+    } catch (error) {
+      if (attempt === maxAttempts) {
+        throw error;
+      }
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    }
   }
 }
