@@ -1,5 +1,11 @@
 # @backstage/frontend-app-api
 
+## 0.16.5-next.1
+
+### Patch Changes
+
+- 6ea6d31: Internal refactor of the specialized app sign-in runtime to initialize it once instead of reassigning it.
+
 ## 0.16.5-next.0
 
 ### Patch Changes

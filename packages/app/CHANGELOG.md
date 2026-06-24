@@ -1,5 +1,14 @@
 # example-app
 
+## 0.0.37-next.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @backstage/plugin-app-module-user-settings@0.1.0-next.0
+  - @backstage/ui@0.17.0-next.1
+  - @backstage/frontend-app-api@0.16.5-next.1
+
 ## 0.0.37-next.0
 
 ### Patch Changes
